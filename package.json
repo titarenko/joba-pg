@@ -1,6 +1,6 @@
 {
   "name": "joba-pg",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Joba PostgreSQL persistence plugin.",
   "main": "index.js",
   "scripts": {},

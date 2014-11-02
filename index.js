@@ -1,18 +1,19 @@
 var knex = require('knex');
 var debug = require('debug')('joba-pg');
 
-function Persistence (builder) {
+function Persistence (builder, table) {
 	this.builder = builder;
+	this.table = table;
 }
 
 Persistence.prototype.createWorklogItem = function createWorklogItem (data) {
-	return this.builder.insert(data, 'id').then(function whenInserted (ids) {
+	return this.builder(this.table).insert(data, 'id').then(function whenInserted (ids) {
 		return ids && ids.length && {id: ids[0]};
 	});
 };
 
 Persistence.prototype.updateWorklogItem = function updateWorklogItem (row, data) {
-	return this.builder.update(data).where('id', row.id);
+	return this.builder(this.table).update(data).where('id', row.id);
 };
 
 module.exports = function build (config) {
@@ -29,7 +30,7 @@ module.exports = function build (config) {
 		debug('failed to create work log storage table', error && error.stack || error);
 	});
 
-	return new Persistence(db(config.table));
+	return new Persistence(db, config.table);
 };
 
 function tableDefinition (t) {
