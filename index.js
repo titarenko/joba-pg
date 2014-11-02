@@ -6,7 +6,9 @@ function Persistence (builder) {
 }
 
 Persistence.prototype.createWorklogItem = function createWorklogItem (data) {
-	return this.builder.insert(data, 'id');
+	return this.builder.insert(data, 'id').then(function whenInserted (ids) {
+		return ids && ids.length && {id: ids[0]};
+	});
 };
 
 Persistence.prototype.updateWorklogItem = function updateWorklogItem (row, data) {
